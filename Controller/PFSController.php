@@ -1,11 +1,13 @@
 <?php
 namespace PFS\Controller;
 
+use PFS\Controller\Abstracts\FileOperations;
+use PFS\Model\JsonResponse;
 use PFS\Model\PFSModel;
-use PFS\Controller\Interfaces\PFSInterface;
 use Exception;
+use PFS\Model\XmlResponse;
 
-class PFSController implements PFSInterface
+class PFSController extends FileOperations
 {
     const FileName = "Files/products_";
 
@@ -15,27 +17,17 @@ class PFSController implements PFSInterface
      */
     public function PFSAction(String $key): void
     {
-        $filename = "";
+        $fileName = "";
         $model = new PFSModel();
         $authResponse = $model->getAuthResponse($key);
 
         if ($authResponse["success"] === true) {
             $response = $this->getResponseWithType($authResponse["type"]);
-            $this->createFile($key, $authResponse["type"], $response);
-            $filename = self::FileName . $key . ".".$authResponse["type"];
+            $this->createFile($key, $authResponse["type"], $response, self::FileName);
+            $fileName = self::FileName . $key . ".".$authResponse["type"];
         }
 
-        if($filename != "" && file_exists($filename)) {
-            header('Content-Type: application/octet-stream');
-            header("Content-Transfer-Encoding: utf-8");
-            header("Content-disposition: attachment; filename=\"" . basename($filename) . "\"");
-            ob_clean();
-            flush();
-            if (readfile($filename))
-            {
-                unlink($filename);
-            }
-        }
+        $this->fileDownload($fileName);
     }
 
     /**
@@ -49,29 +41,15 @@ class PFSController implements PFSInterface
         try {
             switch ($type) {
                 case "xml":
-                    $response = $model->getXmlResponse();
+                    $response = $model->getResponse(new XmlResponse());
                     break;
                 case "json":
-                    $response = $model->getJSONResponse();
+                    $response = $model->getResponse(new JsonResponse());
                     break;
             }
         } catch(Exception $e) {
 
         }
         return $response;
-    }
-
-    /**
-     * @param String $key
-     * @param String $type
-     * @param String $data
-     * @return void
-     */
-    public function createFile(String $key, String $type, String $data): void
-    {
-        touch(self::FileName.$key.".".$type);
-        $file = fopen(self::FileName.$key.".".$type, "w");
-        fwrite($file, $data);
-        fclose($file);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 namespace PFS\Model;
 
-use PFS\Model\Abstracts\CreateResponse;
+use PFS\Controller\Interfaces\IResponse;
 
-class PFSModel extends CreateResponse
+class PFSModel
 {
     /**
      * @param String $key
@@ -12,7 +12,6 @@ class PFSModel extends CreateResponse
     public function getAuthResponse(String $key): array
     {
         // Maybe permission and type control with DB in here
-
         if ($key == "qwerty1234") {
             return array(
                 "success" => true,
@@ -29,20 +28,12 @@ class PFSModel extends CreateResponse
     }
 
     /**
-     * @return string
-     * @throws \Exception
-     */
-    public function getXmlResponse(): string
-    {
-       return $this->createXMLResponse($this->getData());
-    }
-
-    /**
+     * @param IResponse $response
      * @return string
      */
-    public function getJSONResponse(): string
+    public function getResponse(IResponse $response): string
     {
-        return $this->createJSONResponse($this->getData());
+       return $response->getResponse($this->getData());
     }
 
     /**
@@ -51,7 +42,6 @@ class PFSModel extends CreateResponse
     private function getData(): array
     {
         // Maybe get this data from DB or File
-
         return array(
             array(
                 "id" => 1,

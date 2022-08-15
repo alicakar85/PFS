@@ -1,23 +1,16 @@
 <?php
-namespace PFS\Model\Abstracts;
+namespace PFS\Model;
 
-abstract class CreateResponse
+use PFS\Controller\Interfaces\IResponse;
+
+class XmlResponse implements IResponse
 {
-    /**
-     * @param array $data
-     * @return string
-     */
-    public function createJSONResponse(array $data): string
-    {
-        return json_encode($data);
-    }
-
     /**
      * @param array $data
      * @return string
      * @throws \Exception
      */
-    public function createXMLResponse(array $data): string
+    public function getResponse(array $data): string
     {
         return $this->arrayToXml($data);
     }
@@ -50,4 +43,3 @@ abstract class CreateResponse
         return $_xml->asXML();
     }
 }
-
