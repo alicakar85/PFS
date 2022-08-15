@@ -6,21 +6,21 @@ use PFS\Model\Abstracts\CreateResponse;
 class PFSModel extends CreateResponse
 {
     /**
-     * @param $key
+     * @param String $key
      * @return array
      */
-    public function getAuthResponse($key): array
+    public function getAuthResponse(String $key): array
     {
         // Maybe permission and type control with DB in here
 
         if ($key == "qwerty1234") {
             return array(
                 "success" => true,
-                "type" => "XML");
+                "type" => "xml");
         } elseif ($key == "ytrewq4321") {
             return array(
                 "success" => true,
-                "type" => "JSON");
+                "type" => "json");
         } else {
             return array(
                 "success" => false,

@@ -4,32 +4,32 @@ namespace PFS\Model\Abstracts;
 abstract class CreateResponse
 {
     /**
-     * @param $data
+     * @param array $data
      * @return string
      */
-    public function createJSONResponse($data): string
+    public function createJSONResponse(array $data): string
     {
         return json_encode($data);
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return string
      * @throws \Exception
      */
-    public function createXMLResponse($data): string
+    public function createXMLResponse(array $data): string
     {
         return $this->arrayToXml($data);
     }
 
     /**
-     * @param $array
-     * @param $rootElement
+     * @param array $array
+     * @param String|null $rootElement
      * @param $xml
      * @return string
      * @throws \Exception
      */
-    public function arrayToXml($array, $rootElement = null, $xml = null): string
+    public function arrayToXml(array $array, String $rootElement = null, $xml = null): string
     {
         $_xml = $xml;
 
